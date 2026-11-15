@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00ff66">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QEVRION MOBILE SECURITY</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d0b;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:20px;background:#101914;border-bottom:1px solid #39ff14}
+.logo{width:65px;height:65px;border:3px solid #39ff14;border-radius:18px;margin:auto;display:flex;align-items:center;justify-content:center;color:#39ff14;font-size:35px;font-weight:bold;box-shadow:0 0 15px #39ff1460}
+h1{font-size:21px;color:#39ff14;margin-bottom:5px}
+.subtitle{font-size:12px;color:#aaa}
+.page{display:none;padding:20px;padding-bottom:90px}
+.page.active{display:block}
+.card{background:#121b16;border:1px solid #263b2c;border-radius:14px;padding:18px;margin-bottom:15px}
+h2{color:#39ff14;font-size:19px}
+h3{color:#39ff14}
+p{color:#ccc;line-height:1.5;font-size:14px}
+button{background:#39ff14;color:#071007;border:none;border-radius:9px;padding:13px;width:100%;font-weight:bold;margin-top:10px;cursor:pointer}
+button.secondary{background:#1c2921;color:#39ff14;border:1px solid #39ff14}
+button.danger{background:#8c2424;color:white}
+.module{display:flex;align-items:center;justify-content:space-between;background:#17231b;border:1px solid #29432e;padding:16px;border-radius:12px;margin-bottom:12px;cursor:pointer}
+.module span{color:#39ff14;font-size:22px}
+.progress{height:10px;background:#26332a;border-radius:10px;overflow:hidden;margin-top:15px}
+.bar{height:100%;width:0%;background:#39ff14;transition:width .2s}
+.result{padding:12px;background:#0c1710;border-left:3px solid #39ff14;margin-top:12px;border-radius:5px}
+.small{font-size:12px;color:#999}
+nav{position:fixed;bottom:0;left:0;right:0;background:#101914;display:flex;justify-content:space-around;border-top:1px solid #39ff14;padding:9px 2px}
+nav button{width:24%;background:transparent;color:#aaa;padding:9px 2px;margin:0;font-size:11px}
+nav button:focus{color:#39ff14}
+.stat{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #26332a;gap:10px}
+.check{padding:10px;background:#0c1710;border-radius:8px;margin:8px 0;font-size:14px}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">Q</div>
+<h1>QEVRION</h1>
+<div class="subtitle">MOBILE SECURITY</div>
+<div class="small">EXPLORE. SECURE. EVOLVE.</div>
+</header>
+
+<!-- ACCUEIL -->
+<section id="accueil" class="page active">
+<div class="card">
+<h2>Centre de protection</h2>
+<p>Bienvenue dans QEVRION MOBILE SECURITY.</p>
+<p>Explore les outils éducatifs de sécurité mobile.</p>
+<button onclick="startScan()">LANCER UNE ANALYSE</button>
+<div class="progress"><div id="mainBar" class="bar"></div></div>
+<div id="mainResult"></div>
+</div>
+
+<div class="card">
+<h3>Statistiques</h3>
+<div class="stat"><span>Analyses effectuées</span><b id="scanCount">0</b></div>
+<div class="stat"><span>Score moyen</span><b id="averageScore">0</b></div>
+<div class="stat"><span>Dernière analyse</span><b id="lastScan">Aucune</b></div>
+</div>
+</section>
+
+<!-- PROTECTION -->
+<section id="protection" class="page">
+<h2>Modules de protection</h2>
+
+<div class="module" onclick="showPage('malware')">
+<div>🛡️ Malware Detection</div><span>›</span>
+</div>
+
+<div class="module" onclick="showPage('privacy')">
+<div>🔐 Privacy Protection</div><span>›</span>
+</div>
+
+<div class="module" onclick="showPage('network')">
+<div>🌐 Network Security</div><span>›</span>
+</div>
+
+<div class="module" onclick="showPage('rapports')">
+<div>📊 Security Reports</div><span>›</span>
+</div>
+</section>
+
+<!-- MALWARE -->
+<section id="malware" class="page">
+<h2>Malware Detection</h2>
+<div class="card">
+<p>Simulation pédagogique de détection des logiciels malveillants.</p>
+<button onclick="startMalwareScan()">LANCER LA VÉRIFICATION</button>
+<div class="progress"><div id="malwareBar" class="bar"></div></div>
+<div id="malwareResult"></div>
+</div>
+
+<div class="card">
+<h3>Historique Malware</h3>
+<div id="malwareHistory"></div>
+<button class="danger" onclick="clearMalwareHistory()">EFFACER L'HISTORIQUE</button>
+</div>
+<button class="secondary" onclick="showPage('protection')">RETOUR</button>
+</section>
+
+<!-- PRIVACY -->
+<section id="privacy" class="page">
+<h2>Privacy Protection</h2>
+<div class="card">
+<p>Apprends à protéger tes données personnelles.</p>
+<h3>Points de contrôle</h3>
+<div class="check">📍 Autorisations de localisation</div>
+<div class="check">🎙️ Accès au microphone</div>
+<div class="check">📷 Accès à la caméra</div>
+<div class="check">👥 Accès aux contacts</div>
+<div class="check">🔒 Paramètres de confidentialité</div>
+
+<button onclick="startPrivacyScan()">LANCER LA VÉRIFICATION</button>
+<div class="progress"><div id="privacyBar" class="bar"></div></div>
+<div id="privacyResult"></div>
+</div>
+
+<div class="card">
+<h3>Historique Privacy</h3>
+<div id="privacyHistory"></div>
+<button class="danger" onclick="clearPrivacyHistory()">EFFACER L'HISTORIQUE</button>
+</div>
+<button class="secondary" onclick="showPage('protection')">RETOUR</button>
+</section>
+
+<!-- NETWORK SECURITY -->
+<section id="network" class="page">
+<h2>Network Security</h2>
+
+<div class="card">
+<p>Découvre les bonnes pratiques pour sécuriser tes connexions réseau.</p>
+
+<h3>Vérification éducative</h3>
+<div class="check">📶 Type de réseau utilisé</div>
+<div class="check">🔐 Protection par mot de passe</div>
+<div class="check">🌐 Sécurité des connexions publiques</div>
+<div class="check">⚠️ Risques liés aux réseaux inconnus</div>
+
+<button onclick="startNetworkScan()">LANCER LA VÉRIFICATION</button>
+
+<div class="progress">
+<div id="networkBar" class="bar"></div>
+</div>
+
+<div id="networkResult"></div>
+</div>
+
+<div class="card">
+<h3>Historique Network Security</h3>
+<div id="networkHistory"></div>
+<button class="danger" onclick="clearNetworkHistory()">EFFACER L'HISTORIQUE</button>
+</div>
+
+<div class="card">
+<h3>Conseils de sécurité</h3>
+<p>✔ Privilégie les réseaux Wi-Fi connus.</p>
+<p>✔ Évite les opérations bancaires sur les réseaux publics non sécurisés.</p>
+<p>✔ Utilise des mots de passe robustes pour ton routeur.</p>
+<p>✔ Désactive le Wi-Fi lorsque tu ne l'utilises pas.</p>
+</div>
+
+<button class="secondary" onclick="showPage('protection')">RETOUR</button>
+</section>
+
+<!-- RAPPORTS -->
+<section id="rapports" class="page">
+<h2>Security Reports</h2>
+<div class="card">
+<h3>Rapports des analyses principales</h3>
+<div id="reports"></div>
+<button class="danger" onclick="clearHistory()">EFFACER LES RAPPORTS</button>
+</div>
+</section>
+
+<!-- PARAMETRES -->
+<section id="parametres" class="page">
+<h2>Paramètres</h2>
+
+<div class="module" onclick="showPage('about')">
+<div>ℹ️ À propos de QEVRION</div><span>›</span>
+</div>
+
+<div class="module" onclick="showPage('help')">
+<div>❓ Aide et assistance</div><span>›</span>
+</div>
+</section>
+
+<!-- A PROPOS -->
+<section id="about" class="page">
+<div class="card" style="text-align:center">
+<div class="logo">Q</div>
+<h2>QEVRION</h2>
+<h3>MOBILE SECURITY</h3>
+<p><b>Explore. Secure. Evolve.</b></p>
+<p>Explorer. Sécuriser. Évoluer.</p>
+</div>
+
+<div class="card">
+<h3>Notre mission</h3>
+<p>QEVRION MOBILE SECURITY est un projet consacré à la sensibilisation, à l'apprentissage et à la découverte de la cybersécurité mobile.</p>
+
+<h3>Notre vision</h3>
+<p>Encourager une utilisation plus responsable et plus sécurisée des technologies numériques.</p>
+
+<h3>Nos objectifs</h3>
+<p>• Sensibiliser aux menaces numériques.</p>
+<p>• Apprendre les bonnes pratiques de sécurité.</p>
+<p>• Comprendre la protection des données personnelles.</p>
+<p>• Promouvoir la cybersécurité éthique.</p>
+
+<h3>Informations</h3>
+<div class="stat"><span>Application</span><b>QEVRION MOBILE SECURITY</b></div>
+<div class="stat"><span>Version</span><b>1.0.0</b></div>
+<div class="stat"><span>Catégorie</span><b>Cybersécurité</b></div>
+</div>
+
+<div class="card">
+<h3>Note importante</h3>
+<p>Cette version contient des simulations pédagogiques. Elle ne réalise pas une véritable analyse antivirus et ne lit pas les autorisations réelles du téléphone.</p>
+</div>
+
+<button class="secondary" onclick="showPage('parametres')">RETOUR</button>
+</section>
+
+<!-- AIDE -->
+<section id="help" class="page">
+<h2>Aide et assistance</h2>
+
+<div class="card">
+<h3>Bienvenue dans le centre d'aide QEVRION</h3>
+<p>Ce guide t'explique comment utiliser les différents modules de l'application.</p>
+</div>
+
+<div class="card">
+<h3>🏠 1. Accueil</h3>
+<p>Depuis l'accueil, tu peux lancer une analyse pédagogique et consulter tes statistiques.</p>
+</div>
+
+<div class="card">
+<h3>🛡️ 2. Malware Detection</h3>
+<p>Ce module présente une simulation de vérification contre les logiciels malveillants.</p>
+<p>Appuie sur « Lancer la vérification » pour démarrer.</p>
+</div>
+
+<div class="card">
+<h3>🔐 3. Privacy Protection</h3>
+<p>Ce module présente les bonnes pratiques pour protéger tes données personnelles et vérifier les autorisations de tes applications.</p>
+</div>
+
+<div class="card">
+<h3>🌐 4. Network Security</h3>
+<p>Ce module t'aide à comprendre les risques des réseaux Wi-Fi et les précautions à prendre pour sécuriser tes connexions.</p>
+</div>
+
+<div class="card">
+<h3>📊 5. Security Reports</h3>
+<p>Cette section permet de consulter les résultats et l'historique des analyses principales.</p>
+</div>
+
+<div class="card">
+<h3>⚙️ 6. Paramètres</h3>
+<p>Tu peux consulter les informations de l'application et revenir au centre d'aide.</p>
+</div>
+
+<div class="card">
+<h3>⚠️ Important</h3>
+<p>Les vérifications de cette version sont des simulations éducatives. Elles ne contrôlent pas réellement les fichiers, les autorisations ou les connexions de ton téléphone.</p>
+</div>
+
+<button class="secondary" onclick="showPage('parametres')">RETOUR AUX PARAMÈTRES</button>
+</section>
+
+<nav>
+<button onclick="showPage('accueil')">🏠<br>Accueil</button>
+<button onclick="showPage('protection')">🛡️<br>Protection</button>
+<button onclick="showPage('rapports')">📊<br>Rapports</button>
+<button onclick="showPage('parametres')">⚙️<br>Paramètres</button>
+</nav>
+
+<script>
+function showPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+
+if(id==='rapports')showReports();
+if(id==='accueil')loadHistory();
+if(id==='malware')loadMalwareHistory();
+if(id==='privacy')loadPrivacyHistory();
+if(id==='network')loadNetworkHistory();
+}
+
+// ANALYSE PRINCIPALE
+function startScan(){
+let bar=document.getElementById('mainBar');
+let result=document.getElementById('mainResult');
+let progress=0;
+
+result.innerHTML="<p>Analyse pédagogique en cours...</p>";
+bar.style.width="0%";
+
+let timer=setInterval(()=>{
+progress+=10;
+bar.style.width=progress+"%";
+
+if(progress>=100){
+clearInterval(timer);
+let score=Math.floor(Math.random()*21)+80;
+let history=JSON.parse(localStorage.getItem('qevrionHistory')||'[]');
+
+history.unshift({score:score,date:new Date().toLocaleString()});
+localStorage.setItem('qevrionHistory',JSON.stringify(history));
+
+result.innerHTML='<div class="result">Analyse terminée.<br>Score simulé : <b>'+score+'/100</b><br><span class="small">Résultat pédagogique, pas une analyse réelle.</span></div>';
+loadHistory();
+}
+},200);
+}
+
+function loadHistory(){
+let history=JSON.parse(localStorage.getItem('qevrionHistory')||'[]');
+document.getElementById('scanCount').textContent=history.length;
+
+let average=history.length?Math.round(history.reduce((a,b)=>a+b.score,0)/history.length):0;
+
+document.getElementById('averageScore').textContent=average+"/100";
+document.getElementById('lastScan').textContent=history.length?history[0].date:"Aucune";
+}
+
+function showReports(){
+let history=JSON.parse(localStorage.getItem('qevrionHistory')||'[]');
+let box=document.getElementById('reports');
+
+box.innerHTML=history.length?
+history.map((x,i)=>'<div class="check">Analyse '+(i+1)+'<br>Score : '+x.score+'/100<br><span class="small">'+x.date+'</span></div>').join('')
+:"<p>Aucun rapport disponible.</p>";
+}
+
+function clearHistory(){
+if(confirm("Effacer les rapports ?")){
+localStorage.removeItem('qevrionHistory');
+showReports();
+loadHistory();
+}
+}
+
+// MALWARE
+function startMalwareScan(){
+let bar=document.getElementById('malwareBar');
+let result=document.getElementById('malwareResult');
+let progress=0;
+
+result.innerHTML="<p>Vérification en cours...</p>";
+bar.style.width="0%";
+
+let timer=setInterval(()=>{
+progress+=10;
+bar.style.width=progress+"%";
+
+if(progress>=100){
+clearInterval(timer);
+let history=JSON.parse(localStorage.getItem('qevrionMalwareHistory')||'[]');
+history.unshift({date:new Date().toLocaleString()});
+localStorage.setItem('qevrionMalwareHistory',JSON.stringify(history));
+
+result.innerHTML='<div class="result">Aucune menace détectée dans cette simulation.<br><span class="small">Les fichiers réels du téléphone ne sont pas analysés.</span></div>';
+loadMalwareHistory();
+}
+},200);
+}
+
+function loadMalwareHistory(){
+let history=JSON.parse(localStorage.getItem('qevrionMalwareHistory')||'[]');
+document.getElementById('malwareHistory').innerHTML=history.length?
+history.map((x,i)=>'<div class="check">Vérification '+(i+1)+'<br><span class="small">'+x.date+'</span></div>').join('')
+:"<p>Aucun historique.</p>";
+}
+
+function clearMalwareHistory(){
+if(confirm("Effacer l'historique Malware ?")){
+localStorage.removeItem('qevrionMalwareHistory');
+loadMalwareHistory();
+}
+}
+
+// PRIVACY
+function startPrivacyScan(){
+let bar=document.getElementById('privacyBar');
+let result=document.getElementById('privacyResult');
+let progress=0;
+
+result.innerHTML="<p>Vérification éducative en cours...</p>";
+bar.style.width="0%";
+
+let timer=setInterval(()=>{
+progress+=10;
+bar.style.width=progress+"%";
+
+if(progress>=100){
+clearInterval(timer);
+let history=JSON.parse(localStorage.getItem('qevrionPrivacyHistory')||'[]');
+history.unshift({date:new Date().toLocaleString()});
+localStorage.setItem('qevrionPrivacyHistory',JSON.stringify(history));
+
+result.innerHTML=`
+<div class="result">
+<b>Vérification terminée !</b>
+<p>✔ Examine les autorisations de localisation.</p>
+<p>✔ Contrôle les accès à la caméra et au microphone.</p>
+<p>✔ Vérifie les applications ayant accès aux contacts.</p>
+<p>✔ Consulte tes paramètres de confidentialité.</p>
+<span class="small">Résultat éducatif : les autorisations réelles ne sont pas inspectées.</span>
+</div>`;
+loadPrivacyHistory();
+}
+},200);
+}
+
+function loadPrivacyHistory(){
+let history=JSON.parse(localStorage.getItem('qevrionPrivacyHistory')||'[]');
+document.getElementById('privacyHistory').innerHTML=history.length?
+history.map((x,i)=>'<div class="check">Vérification '+(i+1)+'<br><span class="small">'+x.date+'</span></div>').join('')
+:"<p>Aucun historique.</p>";
+}
+
+function clearPrivacyHistory(){
+if(confirm("Effacer l'historique Privacy ?")){
+localStorage.removeItem('qevrionPrivacyHistory');
+loadPrivacyHistory();
+}
+}
+
+// NETWORK SECURITY
+function startNetworkScan(){
+let bar=document.getElementById('networkBar');
+let result=document.getElementById('networkResult');
+let progress=0;
+
+result.innerHTML="<p>Simulation de vérification réseau en cours...</p>";
+bar.style.width="0%";
+
+let timer=setInterval(()=>{
+progress+=10;
+bar.style.width=progress+"%";
+
+if(progress>=100){
+clearInterval(timer);
+
+let history=JSON.parse(localStorage.getItem('qevrionNetworkHistory')||'[]');
+history.unshift({date:new Date().toLocaleString()});
+localStorage.setItem('qevrionNetworkHistory',JSON.stringify(history));
+
+result.innerHTML=`
+<div class="result">
+<b>Vérification terminée !</b>
+<p>✔ Privilégie les réseaux Wi-Fi protégés.</p>
+<p>✔ Évite les réseaux inconnus.</p>
+<p>✔ Vérifie les paramètres de sécurité de ton routeur.</p>
+<p>✔ Ne partage pas tes informations sensibles sur un réseau public non sécurisé.</p>
+<span class="small">Simulation éducative : aucune connexion Wi-Fi réelle n'a été inspectée.</span>
+</div>`;
+
+loadNetworkHistory();
+}
+},200);
+}
+
+function loadNetworkHistory(){
+let history=JSON.parse(localStorage.getItem('qevrionNetworkHistory')||'[]');
+document.getElementById('networkHistory').innerHTML=history.length?
+history.map((x,i)=>'<div class="check">Vérification '+(i+1)+'<br><span class="small">'+x.date+'</span></div>').join('')
+:"<p>Aucun historique.</p>";
+}
+
+function clearNetworkHistory(){
+if(confirm("Effacer l'historique Network Security ?")){
+localStorage.removeItem('qevrionNetworkHistory');
+loadNetworkHistory();
+}
+}
+
+loadHistory();
+</script>
+
+  <script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+            .then(() => console.log("QEVRION : service worker activé"))
+            .catch(error => console.error("Erreur :", error));
+    });
+}
+  </script>
+
+</body>
+</html>
